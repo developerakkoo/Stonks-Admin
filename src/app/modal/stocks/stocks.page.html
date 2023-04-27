@@ -1,0 +1,40 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Add Calls</ion-title>
+    <ion-button (click)="close()" slot="end" fill="clear">
+      <ion-icon slot="icon-only" name="close"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+<form [formGroup]="stockForm" (ngSubmit)="onSubmit()">
+ 
+
+  <ion-item>
+    <ion-label>Call</ion-label>
+    <ion-select formControlName="call" value="BUYNOW" multiple="false" placeholder="Select Type">
+      <ion-select-option value="BUY-NOW">BUY NOW</ion-select-option>
+      <ion-select-option value="BUY-NOW-IF-NIFTY-TOUCHES-ONLY-AT">BUY NOW IF NIFTY TOUCHES ONLY AT</ion-select-option>
+      <ion-select-option value="SELL-NOW-IF-NIFTY-TOUCHES-ONLY-AT">SELL NOW IF NIFTY TOUCHES ONLY AT</ion-select-option>
+      <ion-select-option value="NO-CALLS">NO CALLS</ion-select-option>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Put <ion-text color="danger">*</ion-text></ion-label>
+    <ion-input required formControlName="put" type="text"></ion-input>
+  </ion-item>
+  <ion-item>
+    <ion-label position="floating">Target Price <ion-text color="danger">*</ion-text></ion-label>
+    <ion-input required formControlName="targetPrice" type="number"></ion-input>
+  </ion-item>
+
+  <ion-item>
+    <ion-label position="floating">Stop Loss <ion-text color="danger">*</ion-text></ion-label>
+    <ion-input required formControlName="stopLoss" type="number"></ion-input>
+  </ion-item>
+  <ion-button block color="primary" type="submit" [disabled]="stockForm.invalid">
+    Submit
+  </ion-button>
+</form>
+</ion-content>

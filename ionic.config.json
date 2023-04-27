@@ -1,0 +1,7 @@
+{
+  "name": "adminstocks",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

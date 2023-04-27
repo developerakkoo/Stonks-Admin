@@ -1,0 +1,20 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>{{ folder }}</ion-title>
+    <ion-button *ngIf="isStocks" (click)="openStocks()" slot="end" color="primary">
+      <ion-icon slot="start" name="add"></ion-icon>
+      Add Calls
+    </ion-button>
+    <ion-button *ngIf="isSub" (click)="openSubscription()" slot="end" color="primary">
+      <ion-icon slot="start" name="add"></ion-icon>
+      Add Subscriptions
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  
+</ion-content>

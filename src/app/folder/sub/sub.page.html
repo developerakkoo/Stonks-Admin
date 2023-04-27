@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Add Subscription</ion-title>
+    <ion-button (click)="dismiss()" slot="end" fill="clear">
+      <ion-icon slot="icon-only" name="close"></ion-icon>
+    </ion-button>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <form [formGroup]="subForm" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-label position="floating">Name <ion-text color="danger">*</ion-text></ion-label>
+      <ion-input required formControlName="name" type="text"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Price <ion-text color="danger">*</ion-text></ion-label>
+      <ion-input required formControlName="price" type="number"></ion-input>
+    </ion-item>
+
+
+    <ion-item>
+      <ion-label>Duration</ion-label>
+      <ion-select value="1" multiple="false" placeholder="Select Duration">
+        <ion-select-option value="1">1</ion-select-option>
+        <ion-select-option value="2">2</ion-select-option>
+        <ion-select-option value="3">3</ion-select-option>
+        <ion-select-option value="4">4</ion-select-option>
+        <ion-select-option value="5">5</ion-select-option>
+        <ion-select-option value="6">6</ion-select-option>
+        <ion-select-option value="7">7</ion-select-option>
+        <ion-select-option value="8">8</ion-select-option>
+        <ion-select-option value="9">9</ion-select-option>
+        <ion-select-option value="10">10</ion-select-option>
+        <ion-select-option value="11">11</ion-select-option>
+        <ion-select-option value="12">12</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label position="floating">Description <ion-text color="danger">*</ion-text></ion-label>
+      <ion-input required formControlName="description" type="text"></ion-input>
+    </ion-item>
+    <ion-button block color="primary" type="submit" [disabled]="subForm.invalid">
+      Submit
+    </ion-button>
+  </form>
+</ion-content>

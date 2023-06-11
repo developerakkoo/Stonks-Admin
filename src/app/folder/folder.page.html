@@ -6,15 +6,68 @@
     <ion-title>{{ folder }}</ion-title>
     <ion-button *ngIf="isStocks" (click)="openStocks()" slot="end" color="primary">
       <ion-icon slot="start" name="add"></ion-icon>
-      Add Calls
+      Add
     </ion-button>
     <ion-button *ngIf="isSub" (click)="openSubscription()" slot="end" color="primary">
       <ion-icon slot="start" name="add"></ion-icon>
-      Add Subscriptions
+      Add 
     </ion-button>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  
+  <ion-grid fixed *ngIf="isSub">
+    <ion-row>
+      <ion-col size="12">
+        <ion-list>
+          <ion-item *ngFor="let item of subscriptionPlansList" detail (click)="openEditPage(item)">
+            <ion-label>
+              <p> <strong>Name: </strong> {{item.name}} </p>
+              <p> <strong>Price: </strong> {{item.price}} </p>
+              <p> <strong>Duration: </strong> {{item.duration}} </p>
+              <p> <strong>Description: </strong> {{item.description}} </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col size="6"></ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="isUser">
+    <ion-row>
+      <ion-col size="12">
+        <ion-text class="ion-text-center" color="dark" *ngIf="usersList.length == 0">
+          <h6>No Users yet!</h6>
+        </ion-text>
+        <ion-list *ngIf="usersList.length > 0">
+          <ion-item *ngFor="let item of usersList">
+            <ion-label>Awesome Label</ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+      <ion-col size="6"></ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <ion-grid *ngIf="isStocks">
+    <ion-row>
+      <ion-col size="12">
+        <ion-text class="ion-text-center" color="dark" *ngIf="stocksList.length == 0">
+          <h6>No Call/Put yet!</h6>
+        </ion-text>
+        <ion-list *ngIf="stocksList.length > 0">
+          <ion-item *ngFor="let item of stocksList" [color]="item.isCall ? 'success' : 'danger'" detail>
+            <ion-label> 
+              <p *ngIf="item.isCall"> <strong>CALL: </strong> {{item.call}}  </p> 
+              <p *ngIf="!item.isCall"> <strong>PUT: </strong> {{ item.put }}  </p> 
+              <p> <strong>TARGET PRICE: </strong> {{item.targetPrice}}  </p> 
+              <p> <strong>STOP LOSS: </strong> {{item.stopLoss}}  </p> 
+              <p> <strong>DATE Added: </strong> {{item.createdAt | date}} </p>
+            </ion-label>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

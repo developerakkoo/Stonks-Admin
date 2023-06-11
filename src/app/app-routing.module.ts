@@ -18,6 +18,10 @@ const routes: Routes = [
   {
     path: 'stocks',
     loadChildren: () => import('./modal/stocks/stocks.module').then( m => m.StocksPageModule)
+  },
+  {
+    path: 'edit-subscription',
+    loadChildren: () => import('./edit-subscription/edit-subscription.module').then( m => m.EditSubscriptionPageModule)
   }
 ];
 

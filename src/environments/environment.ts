@@ -3,6 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  API:"https://api.niftyleveltracker.in/",
   firebase: {
     projectId: 'stonks-b66d4',
     appId: '1:760823659531:web:7194546693050eea9b5b0e',

@@ -10,7 +10,6 @@ export class AppComponent {
     { title: 'Stocks', url: '/folder/stocks', icon: 'mail' },
     { title: 'Users', url: '/folder/user', icon: 'person' },
     { title: 'Subscriptions', url: '/folder/sub', icon: 'heart' },
-    { title: 'Charts', url: '/folder/chart', icon: 'bar-chart' },
   ];
   constructor(private menuCtrl: MenuController) {
     this.menuCtrl.enable(false);

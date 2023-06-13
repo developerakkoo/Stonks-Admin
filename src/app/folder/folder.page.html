@@ -42,7 +42,11 @@
         </ion-text>
         <ion-list *ngIf="usersList.length > 0">
           <ion-item *ngFor="let item of usersList">
-            <ion-label>Awesome Label</ion-label>
+            <ion-label>
+              <p> <strong>Name: </strong> {{item.name}}</p>
+              <p> <strong>Email: </strong> {{item.email}}</p>
+              <p> <strong>Date: </strong> {{item.createdAt}}</p>
+            </ion-label>
           </ion-item>
         </ion-list>
       </ion-col>

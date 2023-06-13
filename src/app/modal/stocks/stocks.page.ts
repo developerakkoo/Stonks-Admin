@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment';
 export class StocksPage implements OnInit {
 
   stockForm!: FormGroup;
+  type!:string;
   constructor(private modalController: ModalController,
               private fb: FormBuilder,
               private toastController: ToastController,
@@ -22,10 +23,10 @@ export class StocksPage implements OnInit {
                 this.menuCtrL.enable(true);
                 this.stockForm = this.fb.group({
                   call:[],
-                  put:[],
-                  targetPrice:[,[Validators.required]],
-                  stopLoss:[,[Validators.required]],
-                  isCall:[false,[Validators.required]]
+                  targetPrice:[11111, Validators.compose([Validators.required, Validators.minLength(5)])],
+                  entryPrice:[,[Validators.required, Validators.minLength(5),Validators.min(5)]],
+                  stopLoss:[,[Validators.required, Validators.minLength(5),Validators.min(5)]],
+                  isCall:[false,[Validators.required, Validators.minLength(5),Validators.min(5)]]
                 })
                }
 
@@ -52,12 +53,60 @@ export class StocksPage implements OnInit {
     });
     toast.present();
   }
+
+
+
+  typeSelect(ev:any){
+    console.log(ev.detail.value);
+    this.type = ev.detail.value;
+    if(ev.detail.value == 'BUY-NOW' || 'SELL-NOW'){
+      this.presentToast('Target Price will auto filled here');
+    }
+    
+  }
+
   onSubmit(){
     
 
     let targetValue = this.stockForm.get('targetPrice')!.value;
+    let entryValue = this.stockForm.get('entryPrice')!.value;
     let stopValue = this.stockForm.get('stopLoss')!.value;
+
+    if(this.type == 'BUY-NOW'){
+      if(entryValue < stopValue){
+        this.presentToast("Entry value must be greater than Stop Loss");
+        return;
+      }
+    }
+    if(this.type == 'SELL-NOW'){
+      if(entryValue > stopValue){
+        this.presentToast("Entry value must be smaller than Stop Loss");
+        return;
+      }
+    }
+
+    console.log(targetValue.toString().length);
+    console.log(entryValue.toString().length);
+    console.log(stopValue.toString().length);
+    
+    
+
+    if(targetValue.toString().length < 5){
+      this.presentToast("Target value entered is not correct")
+      return;
+    }
+    if( entryValue.toString().length < 5){
+      this.presentToast("Entry value entered is not correct")
+      return;
+    }
+    if(stopValue.toString().length < 5){
+      this.presentToast("Stop Loss value entered is not correct")
+      return;
+    }
+
     if(targetValue > stopValue){
+
+      
       this.presentLoading();
       let obj = {
         ...this.stockForm.value

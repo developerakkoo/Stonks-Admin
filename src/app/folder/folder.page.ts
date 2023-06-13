@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoadingController, ModalController, ToastController } from '@ionic/angular';
+import { LoadingController, MenuController, ModalController, ToastController } from '@ionic/angular';
 import { StocksPage } from '../modal/stocks/stocks.page';
 import { SubPage } from './sub/sub.page';
 import { environment } from 'src/environments/environment';
@@ -33,8 +33,12 @@ export class FolderPage implements OnInit {
   constructor(private modalController: ModalController,
               private loadingController: LoadingController,
               private toastController: ToastController,
+              private menuController: MenuController,
               private router: Router,
-              private http: HttpClient) {}
+              private http: HttpClient) {
+                this.menuController.enable(true);
+                this.loadingController.dismiss();
+              }
 
   ngOnInit() {
     this.folder = this.activatedRoute.snapshot.paramMap.get('id') as string;

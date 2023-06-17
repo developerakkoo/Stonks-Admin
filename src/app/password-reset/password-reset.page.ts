@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail } from '@angular/fire/auth';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { LoadingController, MenuController, ToastController } from '@ionic/angular';
+import { MenuController, ToastController, LoadingController } from '@ionic/angular';
 
 @Component({
-  selector: 'app-auth',
-  templateUrl: './auth.page.html',
-  styleUrls: ['./auth.page.scss'],
+  selector: 'app-password-reset',
+  templateUrl: './password-reset.page.html',
+  styleUrls: ['./password-reset.page.scss'],
 })
-export class AuthPage implements OnInit {
-
+export class PasswordResetPage implements OnInit {
   loginForm!: FormGroup;
   constructor(private menuCtrl: MenuController,
               private fb: FormBuilder,
@@ -21,38 +20,37 @@ export class AuthPage implements OnInit {
     this.menuCtrl.enable(false);
     this.loginForm = this.fb.group({
       email:[, [Validators.required, Validators.email]],
-      password: [, [Validators.required,Validators.min(5)]]
     })
    }
 
   ngOnInit() {
   }
 
-
+  async presentToast(msg:string) {
+    const toast = await this.toastController.create({
+      message:msg,
+      duration: 2000
+    });
+    toast.present();
+  }
 
   async presentLoading() {
     const loading = await this.loadingController.create({
-      message: 'Logging In...',
+      message: 'Sending link...',
     });
     await loading.present();
   }
-  resetPassword(){
-    this.router.navigate(['password-reset']);
-  }
-  async onSubmit(){
+  onSubmit(){
     this.presentLoading();
-   signInWithEmailAndPassword(this.auth,this.loginForm.value.email, this.loginForm.value.password)
-   .then((user) =>{
-
-     this.loadingController.dismiss();
-     if(user.user.uid){
-       this.router.navigate(['folder/stocks']);
-      }
+    sendPasswordResetEmail(this.auth, this.loginForm.value.email).then((success) =>{
+      console.log(success);
+      this.loadingController.dismiss();
+      this.presentToast("check your email for reset email");
     }).catch((error) =>{
       console.log(error);
-     this.loadingController.dismiss();
+      this.loadingController.dismiss();
+      this.presentToast(error.message);
       
     })
-    
   }
 }

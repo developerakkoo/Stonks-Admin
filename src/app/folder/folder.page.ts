@@ -138,7 +138,7 @@ export class FolderPage implements OnInit {
     .subscribe({
       next:(value:any) =>{
         console.log(value);
-        this.stocksList = value['calls'];
+        this.stocksList = value['calls'].slice(0,9);
         this.loadingController.dismiss();
       },
       error:(error) =>{

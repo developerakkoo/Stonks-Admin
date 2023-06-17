@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'edit-subscription',
     loadChildren: () => import('./edit-subscription/edit-subscription.module').then( m => m.EditSubscriptionPageModule)
+  },
+  {
+    path: 'password-reset',
+    loadChildren: () => import('./password-reset/password-reset.module').then( m => m.PasswordResetPageModule)
   }
 ];
 

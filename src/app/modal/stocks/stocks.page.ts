@@ -29,8 +29,8 @@ export class StocksPage implements OnInit {
     this.stockForm = this.fb.group({
       call: [],
       targetPrice: [
-        11111,
-        Validators.compose([Validators.required, Validators.minLength(5)]),
+        ,
+        Validators.required
       ],
       entryPrice: [
         ,
@@ -117,25 +117,25 @@ export class StocksPage implements OnInit {
     let stopValue = this.stockForm.get('stopLoss')!.value;
 
     if (this.type == 'BUY-NOW') {
-      if (entryValue < stopValue) {
+      if (entryValue > stopValue && targetValue > stopValue) {
         this.presentToast('Entry value must be greater than Stop Loss');
         return;
       }
     }
     if (this.type == 'SELL-NOW') {
-      if (entryValue > stopValue) {
+      if (entryValue < stopValue && targetValue < stopValue) {
         this.presentToast('Entry value must be smaller than Stop Loss');
         return;
       }
     }
 
     if (this.type == 'B-IF-NIFTY-TOUCHES-ONLY-AT' || this.type == 'BUY-NOW') {
-      if (targetValue < entryValue) {
+      if (targetValue > entryValue && targetValue > stopValue) {
         this.presentToast('Target Price must be greater than entry price');
       }
     }
     if (this.type == 'S-IF-NIFTY-TOUCHES-ONLY-AT' || this.type == 'SELL-NOW') {
-      if (targetValue > entryValue) {
+      if (targetValue < entryValue && targetValue < stopValue) {
         this.presentToast('Target Price must be smaller than entry price');
       }
     }
@@ -144,20 +144,19 @@ export class StocksPage implements OnInit {
     console.log(entryValue.toString().length);
     console.log(stopValue.toString().length);
 
-    if (targetValue.toString().length < 5) {
-      this.presentToast('Target value entered is not correct');
+    if (targetValue.toString().length != 5) {
+      this.presentToast('Target value is not 5');
       return;
     }
-    if (entryValue.toString().length < 5) {
-      this.presentToast('Entry value entered is not correct');
+    if (entryValue.toString().length != 5) {
+      this.presentToast('Entry value is not 5');
       return;
     }
-    if (stopValue.toString().length < 5) {
-      this.presentToast('Stop Loss value entered is not correct');
+    if (stopValue.toString().length != 5) {
+      this.presentToast('Stop Loss value is not 5');
       return;
     }
 
-    if (targetValue > stopValue) {
       this.presentLoading();
       let obj = {
         ...this.stockForm.value,
@@ -175,8 +174,6 @@ export class StocksPage implements OnInit {
           this.presentToast('Something Went Wrong.');
         },
       });
-    } else {
-      this.presentToast('Target value must be greater than stop loss');
-    }
+    
   }
 }

@@ -7,19 +7,24 @@ import { SubPage } from './sub/sub.page';
 import { environment } from 'src/environments/environment';
 import { Subscription } from 'rxjs';
 import { EditSubscriptionPage } from '../edit-subscription/edit-subscription.page';
-
+import Chart from 'chart.js/auto';
 @Component({
   selector: 'app-folder',
   templateUrl: './folder.page.html',
   styleUrls: ['./folder.page.scss'],
 })
 export class FolderPage implements OnInit {
+  public chart :any;
   public folder!: string;
   private activatedRoute = inject(ActivatedRoute);
   isStocks: boolean = true;
   isUser: Boolean = false;
   isSub: boolean = false;
   isChart: boolean =false;
+
+  label:any;
+  profitData:any;
+  lossData:any;
 
   subscriptionPlansList:any[] = [];
   usersList:any[] = [];
@@ -38,9 +43,14 @@ export class FolderPage implements OnInit {
               private http: HttpClient) {
                 this.menuController.enable(true);
                 this.loadingController.dismiss();
+                setTimeout(() =>{
+    this.createChart();
+
+                },2000)
               }
 
   ngOnInit() {
+    
     this.folder = this.activatedRoute.snapshot.paramMap.get('id') as string;
 
     if(this.folder === "stocks"){
@@ -79,6 +89,7 @@ export class FolderPage implements OnInit {
       this.isChart = true;
       this.isSub = false;
       this.isUser = false;
+      this.getchartDate();
       
 
     }
@@ -97,6 +108,50 @@ export class FolderPage implements OnInit {
       duration: 2000
     });
     toast.present();
+  }
+
+  createChart(){
+  
+    this.chart = new Chart("MyChart", {
+      type: 'bar', //this denotes tha type of chart
+
+      data: {// values on X-Axis
+        labels: this.label, 
+	       datasets: [
+          {
+            label: "Profit",
+            data: this.profitData,
+            backgroundColor: 'limegreen'
+          },
+          {
+            label: "Loss",
+            data:this.lossData,
+            backgroundColor: 'red'
+          }  
+        ]
+      },
+      options: {
+        aspectRatio:1
+      }
+      
+    });
+  }
+
+  getchartDate(){
+    this.http.get(environment.API +'getChart/data')
+    .subscribe({
+      next:(value:any) =>{
+        console.log(value);
+        this.label = value['label'];
+        this.profitData = value['Profit']['dataSet'];
+        this.lossData = value['loss']['data'];
+        
+      },
+      error:(error:any) =>{
+        console.log(error);
+        
+      }
+    })
   }
   getSubscriptionList(){
     this.presentLoading();

@@ -1,13 +1,33 @@
-<ion-header [translucent]="true">
+<ion-header>
   <ion-toolbar>
-    <ion-title>chart</ion-title>
+    <ion-title class="title">Results</ion-title>
+    <ion-buttons color="light" slot="start">
+      <ion-back-button defaultHref="/tabs/tabs/tab3"></ion-back-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">chart</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="chart-container">
+    <canvas  id="MyChart" >{{ chart }}</canvas>
+</div>
+
+
+<ion-list>
+  <ion-list-header>
+    <ion-label>Last 10 Calls Backtested Results</ion-label>
+  </ion-list-header>
+
+
+  <ion-item [color]="item.isCall ?  'success' : 'danger'" *ngFor="let item of data">
+    <ion-label>
+      <p>Date: {{item.createdAt | date}}</p>
+      <p>Target: {{item.targetPrice}} points</p>
+      <p>Stop Loss: {{item.stopLoss}} points</p>
+    </ion-label>
+  </ion-item>
+  
+  
+</ion-list>
+
 </ion-content>

@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LoadingController, MenuController, ModalController, ToastController } from '@ionic/angular';
+import { AlertController, LoadingController, MenuController, ModalController, ToastController } from '@ionic/angular';
 import { StocksPage } from '../modal/stocks/stocks.page';
 import { SubPage } from './sub/sub.page';
 import { environment } from 'src/environments/environment';
@@ -25,7 +25,7 @@ export class FolderPage implements OnInit {
   label:any;
   profitData:any;
   lossData:any;
-
+  isToggleChecked!:boolean;
   subscriptionPlansList:any[] = [];
   usersList:any[] = [];
   stocksList:any[] = [];
@@ -40,6 +40,7 @@ export class FolderPage implements OnInit {
               private toastController: ToastController,
               private menuController: MenuController,
               private router: Router,
+              private alertController: AlertController,
               private http: HttpClient) {
                 this.menuController.enable(true);
                 this.loadingController.dismiss();
@@ -59,6 +60,7 @@ export class FolderPage implements OnInit {
       this.isChart = false;
       this.isSub = false;
       this.isUser = false;
+      this.getCallStatus();
       this.getStockList();
     }
 
@@ -95,9 +97,109 @@ export class FolderPage implements OnInit {
     }
   }
 
+
+  ToggleEvent(ev:any){
+    console.log(ev.detail);
+    
+  }
+  getCallStatus(){
+    this.http.get(environment.API+ "api/get/noCall/6494098da741612bc7797121")
+    .subscribe({
+      next:(value:any) =>{
+        console.log(value);
+        this.isToggleChecked = value['data']['isNoCall'];
+        
+      },
+      error:(error:any) =>{
+        console.log(error);
+        
+      }
+    })
+  }
+  updateCall(ev:any){
+    this.http.put(environment.API + "api/update/noCall/6494098da741612bc7797121",{
+      "isNoCall": ev.detail.checked
+    }).subscribe({
+      next:(value:any) =>{
+        console.log(value);
+        
+      },
+      error:(error:any) =>{
+        console.log(error);
+        
+      }
+    })
+  }
+
+
+  async presentAlertConfirm(user:any) {
+    const alert = await this.alertController.create({
+      header: 'Confirm!',
+      message: 'Message to Send to user!!!',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Okay',
+          handler: (value) => {
+            console.log('Confirm Okay');
+            console.log(value.msg);
+            
+
+            this.notifyUser(user, value.msg);
+          }
+        }
+      ],
+      inputs:[
+        {
+          placeholder:"Message...",
+          max: 100,
+          name:"msg",
+          type:'text',
+          handler:(value) =>{
+            console.log(value);
+            
+          }
+        }
+      ]
+    });
+  
+    await alert.present();
+  }
+  notifyUser(user:any, msg:any){
+    console.log(msg);
+    
+    console.log(user.firebaseToken);
+    this.http.post(environment.API +'firebase/notification',{
+      registrationToken: user.firebaseToken,
+      title:"Nifty Level Tracker",
+      message:{
+        notification: {
+              title: "Nifty Level Tracker",
+              body: msg
+          }
+        }
+    }).subscribe({
+      next:(value:any) =>{
+        console.log(value);
+        
+      },
+      error:(error:any) =>{
+        console.log(error);
+        
+      }
+    })
+    
+  }
   async presentLoading() {
     const loading = await this.loadingController.create({
       message: 'Loading...',
+      duration:2000
     });
     await loading.present();
   }
@@ -172,7 +274,7 @@ export class FolderPage implements OnInit {
 
   getUsersList(){
     this.presentLoading();
-    this.http.get(environment.API +'App/api/v1/getAll')
+    this.http.get(environment.API +'App/api/v1/getAll/user')
     .subscribe({
       next:(value:any) =>{
         console.log(value);
@@ -187,13 +289,15 @@ export class FolderPage implements OnInit {
     })
   }
 
+ 
+
   getStockList(){
     this.presentLoading();
     this.http.get(environment.API +'App/api/v1/getData')
     .subscribe({
       next:(value:any) =>{
         console.log(value);
-        this.stocksList = value['calls'].slice(0,9);
+        this.stocksList = value['calls'];
         this.loadingController.dismiss();
       },
       error:(error) =>{

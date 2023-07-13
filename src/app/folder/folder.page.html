@@ -8,6 +8,7 @@
       <ion-icon slot="start" name="add"></ion-icon>
       Add
     </ion-button>
+    <ion-toggle (ionChange)="updateCall($event)" [checked]="isToggleChecked" class="ion-margin-right" slot="end" *ngIf="isStocks" [enableOnOffLabels]="true">No Call Today</ion-toggle>
     <ion-button *ngIf="isSub" (click)="openSubscription()" slot="end" color="primary">
       <ion-icon slot="start" name="add"></ion-icon>
       Add 
@@ -56,7 +57,11 @@
               <p> <strong>Name: </strong> {{item.name}}</p>
               <p> <strong>Email: </strong> {{item.email}}</p>
               <p> <strong>Date: </strong> {{item.createdAt}}</p>
+
             </ion-label>
+            <ion-button (click)="presentAlertConfirm(item)" slot="end" fill="clear">
+              <ion-icon slot="icon-only" name="rocket"></ion-icon>
+            </ion-button>
           </ion-item>
         </ion-list>
       </ion-col>
@@ -73,8 +78,7 @@
         <ion-list *ngIf="stocksList.length > 0">
           <ion-item *ngFor="let item of stocksList" [color]="item.isCall ? 'success' : 'danger'" detail>
             <ion-label> 
-              <p *ngIf="item.isCall"> <strong>CALL: </strong> {{item.call}}  </p> 
-              <p *ngIf="!item.isCall"> <strong>PUT: </strong> {{ item.put }}  </p> 
+              <p> <strong>CALL: </strong> {{item.call}}  </p> 
               <p> <strong>TARGET PRICE: </strong> {{item.targetPrice}}  </p> 
               <p> <strong>Entry PRICE: </strong> {{item.entryPrice}}  </p> 
               <p> <strong>STOP LOSS: </strong> {{item.stopLoss}}  </p> 

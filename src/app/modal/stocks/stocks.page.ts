@@ -28,6 +28,7 @@ export class StocksPage implements OnInit {
     this.menuCtrL.enable(true);
     this.stockForm = this.fb.group({
       call: [],
+      put: [''],
       targetPrice: [
         ,
         Validators.required
@@ -97,11 +98,11 @@ export class StocksPage implements OnInit {
   getNiftyPrice() {
     this.http.get(environment.API + 'App/api/live/index').subscribe({
       next: (value: any) => {
-        console.log(value[0]['LTP']);
-        let price = value[0]['LTP'];
-        let target = price + 120;
-        let stoploss = price - 120;
-        this.stockForm.controls['entryPrice'].setValue(value[0]['LTP']);
+        console.log(value[0]['LTP'].toString().split('.')[0]);
+        let price = value[0]['LTP'].toString().split('.')[0];
+        let target = parseInt(price) + 120;
+        let stoploss = parseInt(price) - 120;
+        this.stockForm.controls['entryPrice'].setValue(price);
         this.stockForm.controls['targetPrice'].setValue(target);
         this.stockForm.controls['stopLoss'].setValue(stoploss);
       },
@@ -116,29 +117,47 @@ export class StocksPage implements OnInit {
     let entryValue = this.stockForm.get('entryPrice')!.value;
     let stopValue = this.stockForm.get('stopLoss')!.value;
 
-    if (this.type == 'BUY-NOW') {
-      if (entryValue > stopValue && targetValue > stopValue) {
-        this.presentToast('Entry value must be greater than Stop Loss');
-        return;
-      }
-    }
-    if (this.type == 'SELL-NOW') {
-      if (entryValue < stopValue && targetValue < stopValue) {
-        this.presentToast('Entry value must be smaller than Stop Loss');
-        return;
-      }
-    }
+    // if (this.type == 'BUY-NOW') {
+    //   if (entryValue > stopValue) {
+    //     console.log(parseInt(entryValue) > parseInt(stopValue));
+    //     console.log(parseInt(targetValue) > parseInt(stopValue));
+        
+    //     this.presentToast('Entry value must be greater than Stop Loss');
+    //     return;
+    //   }
 
-    if (this.type == 'B-IF-NIFTY-TOUCHES-ONLY-AT' || this.type == 'BUY-NOW') {
-      if (targetValue > entryValue && targetValue > stopValue) {
-        this.presentToast('Target Price must be greater than entry price');
-      }
-    }
-    if (this.type == 'S-IF-NIFTY-TOUCHES-ONLY-AT' || this.type == 'SELL-NOW') {
-      if (targetValue < entryValue && targetValue < stopValue) {
-        this.presentToast('Target Price must be smaller than entry price');
-      }
-    }
+    //   if( targetValue > stopValue){
+    //     this.presentToast('Target value must be greater than Stop Loss');
+    //     return;
+    //   }
+    // }
+    // if (this.type == 'SELL-NOW') {
+    //   if (entryValue < stopValue) {
+    //     console.log(entryValue < stopValue);
+    //     console.log(targetValue < stopValue);
+    //     this.presentToast('Entry value must be smaller than Stop Loss');
+    //     return;
+    //   }
+    //   if(targetValue < stopValue){
+    //     this.presentToast('Target value must be smaller than Stop Loss');
+    //     return;
+    //   }
+    // }
+
+    // if (this.type == 'B-IF-NIFTY-TOUCHES-ONLY-AT' || this.type == 'BUY-NOW') {
+    //   if (targetValue > entryValue && targetValue > stopValue) {
+    //     this.presentToast('Target Price must be greater than entry price');
+    //   }
+    // }
+    // if (this.type == 'S-IF-NIFTY-TOUCHES-ONLY-AT' || this.type == 'SELL-NOW') {
+    //   if (targetValue < entryValue) {
+    //     this.presentToast('Target Price must be smaller than entry price');
+    //     if(targetValue < stopValue){
+    //     this.presentToast('Target Price must be smaller than stop loss');
+    //       return;
+    //     }
+    //   }
+    // }
 
     console.log(targetValue.toString().length);
     console.log(entryValue.toString().length);

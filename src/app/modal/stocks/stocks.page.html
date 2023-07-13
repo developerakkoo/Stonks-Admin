@@ -27,6 +27,10 @@
     <ion-label position="floating">Entry Price <ion-text color="danger">*</ion-text></ion-label>
     <ion-input required formControlName="entryPrice" type="number"></ion-input>
   </ion-item>
+  <!-- <ion-item hidden>
+    <ion-label position="floating">Entry Price <ion-text color="danger">*</ion-text></ion-label>
+    <ion-input required formControlName="put" type="number"></ion-input>
+  </ion-item> -->
   <ion-item>
     <ion-label position="floating">Target Price <ion-text color="danger">*</ion-text></ion-label>
     <ion-input  required formControlName="targetPrice" type="number"></ion-input>
@@ -39,7 +43,7 @@
 
   <ion-item>
     <ion-label>Is Call?</ion-label>
-    <ion-checkbox slot="end" formControlName="isCall"></ion-checkbox>
+    <ion-checkbox checked="false" slot="end" formControlName="isCall"></ion-checkbox>
   </ion-item>
   <ion-button block color="primary" type="submit" [disabled]="stockForm.invalid">
     Submit

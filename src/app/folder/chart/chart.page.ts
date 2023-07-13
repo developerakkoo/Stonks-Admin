@@ -20,10 +20,12 @@ export class ChartPage implements OnInit {
 
   constructor(private http: HttpClient,
               private loadingController: LoadingController,
-              ) { }
+              ) {
+                this.createChart();
+               }
 
   ngOnInit() {
-    this.createChart();
+   
   }
 
   ionViewDidEnter(){
@@ -73,6 +75,7 @@ export class ChartPage implements OnInit {
     .subscribe({
       next:(value:any) =>{
         console.log(value);
+        this.createChart();
         
       },
       error:(error:any) =>{

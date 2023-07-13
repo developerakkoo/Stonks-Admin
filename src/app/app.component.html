@@ -13,7 +13,16 @@
             </ion-item>
           </ion-menu-toggle>
         </ion-list>
+        <a [href]="excelLink" hidden #link></a>
+        <a [href]="userLink" hidden #ulink></a>
 
+        <ion-button (click)="link.click()" expand="block" fill="clear" shape="round">
+          Export Excel For Stocks
+        </ion-button>
+
+        <ion-button (click)="ulink.click()" expand="block" fill="clear" shape="round">
+          Export Excel For Users
+        </ion-button>
        
       </ion-content>
     </ion-menu>
